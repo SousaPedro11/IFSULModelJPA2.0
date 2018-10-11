@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -24,78 +25,91 @@ import javax.validation.constraints.NotNull;
  * @organization IFSUL - Campus Passo Fundo
  */
 @Entity
-@Table(name = "compra")
+@Table(schema = "IFSUL", name = "compra")
 public class Compra implements Serializable {
+
     @EmbeddedId
     private CompraID id;
+
     @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "data", nullable = false)
     private Calendar data;
+
     @NotNull(message = "O valor total deve ser informado")
     @Column(name = "valor_total", nullable = false, columnDefinition = "numeric(10,2)")
     private Double valorTotal;
-    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, 
-            orphanRemoval = true, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CompraItem> itens = new ArrayList<>();
 
     public Compra() {
-        valorTotal = 0.0;
+
+        this.valorTotal = 0.0;
     }
-    
-    public void adicionarItem(CompraItem obj){
+
+    public void adicionarItem(final CompraItem obj) {
+
         obj.setCompra(this);
-        valorTotal += obj.getValorTotal();
+        this.valorTotal += obj.getValorTotal();
         this.itens.add(obj);
     }
-    
-    public void removerItem(int index){
-        CompraItem obj = (CompraItem) this.itens.get(index);
-        valorTotal -= obj.getValorTotal();
+
+    public void removerItem(final int index) {
+
+        final CompraItem obj = this.itens.get(index);
+        this.valorTotal -= obj.getValorTotal();
         this.itens.remove(index);
     }
-    
 
     public CompraID getId() {
-        return id;
+
+        return this.id;
     }
 
-    public void setId(CompraID id) {
+    public void setId(final CompraID id) {
+
         this.id = id;
     }
 
     public Calendar getData() {
-        return data;
+
+        return this.data;
     }
 
-    public void setData(Calendar data) {
+    public void setData(final Calendar data) {
+
         this.data = data;
     }
 
     public Double getValorTotal() {
-        return valorTotal;
+
+        return this.valorTotal;
     }
 
-    public void setValorTotal(Double valorTotal) {
+    public void setValorTotal(final Double valorTotal) {
+
         this.valorTotal = valorTotal;
     }
 
     @Override
     public int hashCode() {
+
         int hash = 5;
-        hash = 31 * hash + Objects.hashCode(this.id);
+        hash = (31 * hash) + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
+
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Compra other = (Compra) obj;
@@ -106,10 +120,12 @@ public class Compra implements Serializable {
     }
 
     public List<CompraItem> getItens() {
-        return itens;
+
+        return this.itens;
     }
 
-    public void setItens(List<CompraItem> itens) {
+    public void setItens(final List<CompraItem> itens) {
+
         this.itens = itens;
     }
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,144 +34,169 @@ import org.hibernate.validator.constraints.NotBlank;
  * @email jorge.bavaresco@passofundo.ifsul.edu.br
  */
 @Entity
-@Table(name = "produto")
+@Table(schema = "IFSUL", name = "produto")
 public class Produto implements Serializable {
+
     @Id
     @SequenceGenerator(name = "seq_produto", sequenceName = "seq_produto_id", allocationSize = 1)
-    @GeneratedValue(generator = "seq_produto", strategy = GenerationType.SEQUENCE)    
+    @GeneratedValue(generator = "seq_produto", strategy = GenerationType.SEQUENCE)
     private Integer id;
+
     @NotBlank(message = "O nome deve ser informado")
-    @Length(max = 50,message = "O nome não deve ter mais de {max} caracteres")
-    @NotNull(message = "O nome não pode ser nulo")    
-    @Column(name = "nome", length = 50, nullable = false)    
+    @Length(max = 50, message = "O nome não deve ter mais de {max} caracteres")
+    @NotNull(message = "O nome não pode ser nulo")
+    @Column(name = "nome", length = 50, nullable = false)
     private String nome;
+
     @Column(name = "descricao", columnDefinition = "text")
     private String descricao;
-    @NotNull(message = "O preço deve ser informado")    
+
+    @NotNull(message = "O preço deve ser informado")
     @Column(name = "preco", nullable = false, columnDefinition = "decimal(12,2)")
     private Double preco;
+
     @Min(message = "O estoque não pode ser negativo", value = 0)
     @NotNull(message = "A quantidade em estoque deve ser informada")
-    @Column(name = "quantidade_estoque", nullable = false, columnDefinition = "decimal(12,2)")    
+    @Column(name = "quantidade_estoque", nullable = false, columnDefinition = "decimal(12,2)")
     private Double quantidadeEstoque;
+
     @NotNull(message = "A categoria deve ser informada")
     @ManyToOne
     @JoinColumn(name = "categoria", referencedColumnName = "id", nullable = false)
     @ForeignKey(name = "fk_categoria")
     private Categoria categoria;
+
     @NotNull(message = "A marca deve ser informada")
     @ManyToOne
-    @JoinColumn(name = "marca", referencedColumnName = "id", nullable = false)    
+    @JoinColumn(name = "marca", referencedColumnName = "id", nullable = false)
     @ForeignKey(name = "fk_marca")
     private Marca marca;
+
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "desejos",
-            joinColumns = 
-            @JoinColumn(name = "produto", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = 
-            @JoinColumn(name = "pessoa_fisica", referencedColumnName = "id", nullable = false), 
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"pessoa_fisica","produto"})})    
+    @JoinTable(schema = "IFSUL", name = "desejos", joinColumns = @JoinColumn(name = "produto", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "pessoa_fisica", referencedColumnName = "id", nullable = false), uniqueConstraints = {
+                    @UniqueConstraint(columnNames = { "pessoa_fisica", "produto" }) })
     private List<PessoaFisica> desejam = new ArrayList<>();
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, 
-            orphanRemoval = true, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Foto> fotos = new ArrayList<>();
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, 
-            orphanRemoval = true, fetch = FetchType.LAZY)    
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Arquivo> arquivos = new ArrayList<>();
 
     public Produto() {
+
     }
-    
-    public void adicionarFoto(Foto obj){
+
+    public void adicionarFoto(final Foto obj) {
+
         obj.setProduto(this);
         this.fotos.add(obj);
     }
-    
-    public void removerFoto(int index){
+
+    public void removerFoto(final int index) {
+
         this.fotos.remove(index);
     }
-    
-    public void adicionarArquivo(Arquivo obj){
+
+    public void adicionarArquivo(final Arquivo obj) {
+
         obj.setProduto(this);
         this.arquivos.add(obj);
     }
-    
-    public void removerArquivo(int index){
-        this.arquivos.remove(index);
-    }    
 
-    public Integer getId() {
-        return id;
+    public void removerArquivo(final int index) {
+
+        this.arquivos.remove(index);
     }
 
-    public void setId(Integer id) {
+    public Integer getId() {
+
+        return this.id;
+    }
+
+    public void setId(final Integer id) {
+
         this.id = id;
     }
 
     public String getNome() {
-        return nome;
+
+        return this.nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(final String nome) {
+
         this.nome = nome;
     }
 
     public String getDescricao() {
-        return descricao;
+
+        return this.descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(final String descricao) {
+
         this.descricao = descricao;
     }
 
     public Double getPreco() {
-        return preco;
+
+        return this.preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(final Double preco) {
+
         this.preco = preco;
     }
 
     public Double getQuantidadeEstoque() {
-        return quantidadeEstoque;
+
+        return this.quantidadeEstoque;
     }
 
-    public void setQuantidadeEstoque(Double quantidadeEstoque) {
+    public void setQuantidadeEstoque(final Double quantidadeEstoque) {
+
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
     public Categoria getCategoria() {
-        return categoria;
+
+        return this.categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void setCategoria(final Categoria categoria) {
+
         this.categoria = categoria;
     }
-    
+
     public Marca getMarca() {
-        return marca;
+
+        return this.marca;
     }
 
-    public void setMarca(Marca marca) {
+    public void setMarca(final Marca marca) {
+
         this.marca = marca;
-    }    
+    }
 
     @Override
     public int hashCode() {
+
         int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = (97 * hash) + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
+
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Produto other = (Produto) obj;
@@ -181,33 +208,38 @@ public class Produto implements Serializable {
 
     @Override
     public String toString() {
-        return  nome;
-    }  
 
-    public List<PessoaFisica> getDesejam() {
-        return desejam;
+        return this.nome;
     }
 
-    public void setDesejam(List<PessoaFisica> desejam) {
+    public List<PessoaFisica> getDesejam() {
+
+        return this.desejam;
+    }
+
+    public void setDesejam(final List<PessoaFisica> desejam) {
+
         this.desejam = desejam;
     }
 
     public List<Foto> getFotos() {
-        return fotos;
+
+        return this.fotos;
     }
 
-    public void setFotos(List<Foto> fotos) {
+    public void setFotos(final List<Foto> fotos) {
+
         this.fotos = fotos;
     }
 
     public List<Arquivo> getArquivos() {
-        return arquivos;
+
+        return this.arquivos;
     }
 
-    public void setArquivos(List<Arquivo> arquivos) {
+    public void setArquivos(final List<Arquivo> arquivos) {
+
         this.arquivos = arquivos;
     }
-
-
 
 }

@@ -3,6 +3,7 @@ package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -21,55 +23,62 @@ import org.hibernate.validator.constraints.NotBlank;
  * @organization IFSUL - Campus Passo Fundo
  */
 @Entity
-@Table(name = "categoria")
+@Table(schema = "IFSUL", name = "categoria")
 public class Categoria implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "seq_categoria", sequenceName = "seq_categoria_id",allocationSize = 1)
+    @SequenceGenerator(name = "seq_categoria", sequenceName = "seq_categoria_id", allocationSize = 1)
     @GeneratedValue(generator = "seq_categoria", strategy = GenerationType.SEQUENCE)
     private Integer id;
+
     @NotBlank(message = "O nome deve ser informado")
     @Length(max = 40, message = "O nome não deve ter mais que {max} caracteres")
     @NotNull(message = "O nome não pode ser nulo")
-    @Column(name = "nome",length = 40, nullable = false)
+    @Column(name = "nome", length = 40, nullable = false)
     private String nome;
-    
-    public Categoria(){
-        
+
+    public Categoria() {
+
     }
 
     public Integer getId() {
-        return id;
+
+        return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
+
         this.id = id;
     }
 
     public String getNome() {
-        return nome;
+
+        return this.nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(final String nome) {
+
         this.nome = nome;
     }
 
     @Override
     public int hashCode() {
+
         int hash = 5;
-        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = (67 * hash) + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
+
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Categoria other = (Categoria) obj;
@@ -81,10 +90,8 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return nome;
+
+        return this.nome;
     }
-    
-    
-    
-    
+
 }

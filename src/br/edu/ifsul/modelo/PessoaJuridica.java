@@ -1,10 +1,12 @@
 package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -16,7 +18,7 @@ import org.hibernate.validator.constraints.br.CNPJ;
  * @organization IFSUL - Campus Passo Fundo
  */
 @Entity
-@Table(name = "pessoa_juridica")
+@Table(schema = "IFSUL", name = "pessoa_juridica")
 public class PessoaJuridica extends Pessoa implements Serializable {
 
     @Length(max = 15, message = "A inscrição estadual deve possuir {max} caracteres.")
@@ -32,23 +34,27 @@ public class PessoaJuridica extends Pessoa implements Serializable {
     @Column(name = "cnpj", length = 18, nullable = false)
     private String cnpj;
 
-
     public PessoaJuridica() {
+
     }
 
     public String getIe() {
-        return ie;
+
+        return this.ie;
     }
 
-    public void setIe(String ie) {
+    public void setIe(final String ie) {
+
         this.ie = ie;
     }
 
     public String getCnpj() {
-        return cnpj;
+
+        return this.cnpj;
     }
 
-    public void setCnpj(String cnpj) {
+    public void setCnpj(final String cnpj) {
+
         this.cnpj = cnpj;
     }
 

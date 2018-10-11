@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -29,91 +31,108 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "pessoa")
+@Table(schema = "IFSUL", name = "pessoa")
 public class Pessoa implements Serializable {
+
     @Id
     @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa_id", allocationSize = 1)
     @GeneratedValue(generator = "seq_pessoa", strategy = GenerationType.SEQUENCE)
     private Integer id;
+
     @NotNull(message = "O nome não pode ser nulo")
     @NotBlank(message = "O nome não ser em branco")
     @Length(max = 50, message = "O nome não pode ter mais de {max} caracteres")
     @Column(name = "nome", length = 50, nullable = false)
     private String nome;
+
     @NotNull(message = "O email não pode ser nulo")
     @NotBlank(message = "O email não ser em branco")
     @Length(max = 50, message = "O email não pode ter mais de {max} caracteres")
-    @Column(name = "email", length = 50, nullable = false)    
+    @Column(name = "email", length = 50, nullable = false)
     private String email;
+
     @NotNull(message = "O telefone não pode ser nulo")
     @NotBlank(message = "O telefone não ser em branco")
     @Length(max = 14, message = "O telefone não pode ter mais de {max} caracteres")
-    @Column(name = "telefone", length = 14, nullable = false)    
+    @Column(name = "telefone", length = 14, nullable = false)
     private String telefone;
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true, 
-            fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Endereco> enderecos = new ArrayList<>();
 
     public Pessoa() {
+
     }
-    
-    public void adicionarEndereco(Endereco obj){
+
+    public void adicionarEndereco(final Endereco obj) {
+
         obj.setPessoa(this);
         this.enderecos.add(obj);
     }
-    
-    public void removerEndereco(int index){
+
+    public void removerEndereco(final int index) {
+
         this.enderecos.remove(index);
     }
 
     public Integer getId() {
-        return id;
+
+        return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
+
         this.id = id;
     }
 
     public String getNome() {
-        return nome;
+
+        return this.nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(final String nome) {
+
         this.nome = nome;
     }
 
     public String getEmail() {
-        return email;
+
+        return this.email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
+
         this.email = email;
     }
 
     public String getTelefone() {
-        return telefone;
+
+        return this.telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(final String telefone) {
+
         this.telefone = telefone;
     }
 
     @Override
     public int hashCode() {
+
         int hash = 3;
-        hash = 73 * hash + Objects.hashCode(this.id);
+        hash = (73 * hash) + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
+
         if (this == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (this.getClass() != obj.getClass()) {
             return false;
         }
         final Pessoa other = (Pessoa) obj;
@@ -124,10 +143,12 @@ public class Pessoa implements Serializable {
     }
 
     public List<Endereco> getEnderecos() {
-        return enderecos;
+
+        return this.enderecos;
     }
 
-    public void setEnderecos(List<Endereco> enderecos) {
+    public void setEnderecos(final List<Endereco> enderecos) {
+
         this.enderecos = enderecos;
     }
 }
